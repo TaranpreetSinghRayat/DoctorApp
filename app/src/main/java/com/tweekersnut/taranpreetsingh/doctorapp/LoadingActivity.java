@@ -1,8 +1,12 @@
 package com.tweekersnut.taranpreetsingh.doctorapp;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.Handler;
+import android.provider.Settings;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.WindowManager;
@@ -27,23 +31,30 @@ public class LoadingActivity extends AppCompatActivity {
 
     TextView loadingLbl;
 
+    AlertDialog.Builder errorBox;
+
     /*
     Loading Screen Check : Perform all checks required to run before starting main activity.
      */
     public void loadingScreenCheck(){
         loadingScreenHandler = new Handler();
-        loadingScreenHandler.post(new Runnable() {
+        loadingScreenHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 loadingLbl.setText("Checking Internet Connection!");
                 boolean internetStatus = isNetworkConnected();
                 if(internetStatus){
-                    createPop("Internet Connected!");
+                    loadingScreenHandler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loadingLbl.setText("Connection to server!");
+                        }
+                    }, 1000);
                 }else{
-                    createError("Error Occur","Error : Internet Connection not found.","Exit","Open Settings");
+                    createError("Error Occur","Error : Internet Connection not found.","Open Settings","Exit","Internet");
                 }
             }
-        });
+        },1000);
     }
 
     /*
@@ -59,14 +70,54 @@ public class LoadingActivity extends AppCompatActivity {
         Create Toast
      */
     public void createPop(String msg){
-        Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(),msg, Toast.LENGTH_SHORT).show();
     }
 
     /*
         Create error Box with message and options.
      */
-    public void createError(String title,String msg,String yes,String no){
+    public void createError(String title,String msg,String yes,String no,String type){
+        switch (type){
+            case "Internet":
+                    errorBox = new AlertDialog.Builder(LoadingActivity.this);
+                    errorBox.setTitle(title);
+                    errorBox.setMessage(msg);
+                    errorBox.setPositiveButton(yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            startActivity(new Intent(Settings.ACTION_SETTINGS));
+                        }
+                    });
+                    errorBox.setNegativeButton(no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
+                    errorBox.setCancelable(true);
+                    errorBox.show();
+                break;
+            default:
 
+                break;
+        }
+    }
+
+    /*
+        Stop backbutton action
+     */
+    @Override
+    public void onBackPressed() {
+       createPop("Please wait loading in process.");
+    }
+
+    /*
+        Restart all process when back from settings.
+     */
+    @Override
+    public void onPostResume(){
+        super.onPostResume();
+        loadingScreenCheck();
     }
 
     @Override
