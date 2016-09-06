@@ -59,11 +59,25 @@ public class LoadingActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             loadingLbl.setText("Connection to server!");
-                           boolean pingStatus =  pingServer("taranpreetsingh.com");
+                           boolean pingStatus =  pingServer("tweekersnut.com");
                             if(pingStatus){
                                 loadingLbl.setText("Downloading Components!");
+                                loadingScreenHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        loadingLbl.setText("Starting Up!");
+                                        loadingScreenHandler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Intent intent = new Intent(LoadingActivity.this, LoginActivity.class);
+                                                startActivity(intent);
+                                            }
+                                        }, 1000);
+                                    }
+                                }, 1000);
                             }else{
                                 createPop("Error Unable to connect to server.\n Please check your connection");
+                                createError("Error Occur","Error : Internet Connection not Working.\n Please restart your connection.","Open Settings","Exit","Internet");
                             }
                         }
                     }, 1000);
