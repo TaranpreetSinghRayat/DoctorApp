@@ -1,21 +1,32 @@
 package com.tweekersnut.taranpreetsingh.doctorapp;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 import org.w3c.dom.Text;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Socket;
+import java.net.URL;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -48,6 +59,12 @@ public class LoadingActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             loadingLbl.setText("Connection to server!");
+                           boolean pingStatus =  pingServer("taranpreetsingh.com");
+                            if(pingStatus){
+                                loadingLbl.setText("Downloading Components!");
+                            }else{
+                                createPop("Error Unable to connect to server.\n Please check your connection");
+                            }
                         }
                     }, 1000);
                 }else{
@@ -118,6 +135,35 @@ public class LoadingActivity extends AppCompatActivity {
     public void onPostResume(){
         super.onPostResume();
         loadingScreenCheck();
+    }
+
+    /*
+        Ping server to check connection.
+     */
+    public boolean pingServer(String url){
+        Runtime runtime = Runtime.getRuntime();
+        try
+        {
+            Process  mIpAddrProcess = runtime.exec("/system/bin/ping -c 1 "+ url);
+            int mExitValue = mIpAddrProcess.waitFor();
+            System.out.println(" mExitValue "+mExitValue);
+            if(mExitValue==0){
+                return true;
+            }else{
+                return false;
+            }
+        }
+        catch (InterruptedException ignore)
+        {
+            ignore.printStackTrace();
+            System.out.println(" Exception:"+ignore);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+            System.out.println(" Exception:"+e);
+        }
+        return false;
     }
 
     @Override
