@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
@@ -191,4 +192,5 @@ public class LoadingActivity extends AppCompatActivity {
 
         loadingScreenCheck();
     }
+
 }
