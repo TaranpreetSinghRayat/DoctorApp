@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,13 +9,21 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     android:background="@drawable/background"
+    android:weightSum="10"
     tools:context="com.tweekersnut.taranpreetsingh.doctorapp.LoginActivity">
-
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_weight="1.6">
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:layout_weight="8"
+        >
 
 
         <ImageView
@@ -37,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Username : "
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="#FF29C6FF"
                 android:id="@+id/usernameLbl"
                 android:textStyle="bold"
                 android:textSize="20sp"
@@ -63,7 +71,7 @@
                 android:text="Password : "
                 android:id="@+id/passwordLbl"
                 android:textSize="20sp"
-                android:textColor="@color/colorPrimaryDark"
+                android:textColor="#FF29C6FF"
                 android:textStyle="bold"
                 android:layout_marginLeft="10px" />
 
@@ -173,4 +181,5 @@
         </LinearLayout>
     </LinearLayout>
 
-</RelativeLayout>
+
+</LinearLayout>
